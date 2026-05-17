@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HCISS AI Security Readiness Kit™ | Enterprise AI Governance & Cybersecurity</title>
+<meta name="description" content="HCISS AI Security Readiness Kit™ helps organizations identify AI governance gaps, reduce data exposure risks, and establish stronger cybersecurity controls before problems become costly." />
+<meta name="keywords" content="AI security, AI governance, cybersecurity, compliance, AI readiness assessment, enterprise AI" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy-950: #02050f;
+    --navy-900: #050c1f;
+    --navy-800: #081228;
+    --navy-700: #0d1c3a;
+    --navy-600: #122348;
+    --navy-500: #1a2f5e;
+    --blue-accent: #1e3a7a;
+    --blue-mid: #2651a8;
+    --blue-bright: #3b6fd4;
+    --gold-deep: #8b6914;
+    --gold-mid: #c49a2a;
+    --gold: #d4aa3a;
+    --gold-light: #e8c84e;
+    --gold-shine: #f5e07a;
+    --white: #ffffff;
+    --white-90: rgba(255,255,255,0.9);
+    --white-70: rgba(255,255,255,0.7);
+    --white-50: rgba(255,255,255,0.5);
+    --white-20: rgba(255,255,255,0.2);
+    --white-10: rgba(255,255,255,0.1);
+    --white-05: rgba(255,255,255,0.05);
+    --glow-blue: rgba(59, 111, 212, 0.3);
+    --glow-gold: rgba(212, 170, 58, 0.2);
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--navy-950);
+    color: var(--white-90);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* GRID BACKGROUND */
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--white-05) 1px, transparent 1px),
+      linear-gradient(90deg, var(--white-05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  /* TYPOGRAPHY */
+  h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; }
+
+  .gold-text {
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-shine), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .section-label {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  /* BUTTONS */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    color: var(--navy-950);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    padding: 0.85rem 1.8rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold-shine));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--glow-gold); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--white-90);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    padding: 0.85rem 1.8rem;
+    border-radius: 4px;
+    border: 1px solid var(--white-20);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .btn-secondary:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(212,170,58,0.05);
+    transform: translateY(-2px);
+  }
+
+  .btn-outline-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--gold);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    padding: 0.6rem 1.2rem;
+    border-radius: 3px;
+    border: 1px solid var(--gold);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+  .btn-outline-gold:hover {
+    background: var(--gold);
+    color: var(--navy-950);
+  }
+
+  /* ANNOUNCEMENT BAR */
+  .announcement-bar {
+    background: linear-gradient(90deg, var(--navy-700), var(--blue-accent), var(--navy-700));
+    border-bottom: 1px solid rgba(212,170,58,0.3);
+    padding: 0.65rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    animation: barPulse 4s ease-in-out infinite;
+  }
+  @keyframes barPulse {
+    0%, 100% { border-bottom-color: rgba(212,170,58,0.3); }
+    50% { border-bottom-color: rgba(212,170,58,0.7); }
+  }
+  .announcement-bar .bar-icon {
+    color: var(--gold);
+    font-size: 0.85rem;
+  }
+  .announcement-bar p {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--white-90);
+    letter-spacing: 0.02em;
+  }
+  .announcement-bar strong { color: var(--gold-light); }
+
+  /* NAV */
+  nav {
+    position: relative;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.4rem 5%;
+    border-bottom: 1px solid var(--white-10);
+    background: rgba(2,5,15,0.7);
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    text-decoration: none;
+  }
+  .nav-logo-icon {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, var(--navy-600), var(--blue-accent));
+    border: 1px solid rgba(212,170,58,0.4);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+  }
+  .nav-logo-text {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--white);
+    letter-spacing: 0.05em;
+  }
+  .nav-logo-text span { color: var(--gold); }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--white-70);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta { margin-left: 1rem; }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    nav { padding: 1rem 5%; }
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 5% 4rem;
+    overflow: hidden;
+  }
+  .hero-glow {
+    position: absolute;
+    width: 900px;
+    height: 700px;
+    background: radial-gradient(ellipse at center, rgba(30,58,122,0.5) 0%, rgba(38,81,168,0.2) 40%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    animation: glow-pulse 6s ease-in-out infinite;
+  }
+  .hero-glow-gold {
+    position: absolute;
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse at center, rgba(212,170,58,0.08) 0%, transparent 70%);
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 860px;
+    animation: fadeUp 0.9s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(212,170,58,0.1);
+    border: 1px solid rgba(212,170,58,0.3);
+    border-radius: 100px;
+    padding: 0.4rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 2rem;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: dot-blink 2s ease-in-out infinite;
+  }
+  @keyframes dot-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5.5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    color: var(--white);
+  }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-shine));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 400;
+    color: var(--white-70);
+    max-width: 680px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+  .trust-indicators {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem 2rem;
+    flex-wrap: wrap;
+    padding-top: 2rem;
+    border-top: 1px solid var(--white-10);
+  }
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--white-60);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .trust-item .trust-dot {
+    width: 5px;
+    height: 5px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+
+  /* SECTIONS */
+  section { padding: 6rem 5%; position: relative; }
+  .container { max-width: 1140px; margin: 0 auto; }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .section-header h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    color: var(--white);
+  }
+  .section-header p {
+    font-size: 1.05rem;
+    color: var(--white-60);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* PAIN POINTS */
+  .pain-section {
+    background: linear-gradient(180deg, var(--navy-950) 0%, var(--navy-900) 100%);
+    border-top: 1px solid var(--white-05);
+    border-bottom: 1px solid var(--white-05);
+  }
+  .pain-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .pain-card {
+    background: var(--white-05);
+    border: 1px solid var(--white-10);
+    border-radius: 8px;
+    padding: 1.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.35s ease;
+    backdrop-filter: blur(8px);
+  }
+  .pain-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
+    opacity: 0;
+    transition: opacity 0.35s;
+  }
+  .pain-card:hover::before { opacity: 1; }
+  .pain-card:hover {
+    border-color: rgba(212,170,58,0.25);
+    background: rgba(255,255,255,0.07);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 32px rgba(212,170,58,0.06);
+  }
+  .pain-icon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, rgba(30,58,122,0.6), rgba(38,81,168,0.3));
+    border: 1px solid rgba(59,111,212,0.3);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+  }
+  .pain-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.6rem;
+  }
+  .pain-card p {
+    font-size: 0.88rem;
+    color: var(--white-60);
+    line-height: 1.6;
+  }
+
+  /* SOLUTION */
+  .solution-section {
+    background: var(--navy-900);
+  }
+  .workflow-timeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 3rem 0;
+  }
+  .timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+  }
+  .timeline-node {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, var(--navy-600), var(--blue-accent));
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s;
+  }
+  .timeline-step:hover .timeline-node {
+    background: var(--gold);
+    color: var(--navy-950);
+    box-shadow: 0 0 24px var(--glow-gold);
+  }
+  .timeline-label {
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--white-70);
+  }
+  .timeline-connector {
+    flex: 1;
+    min-width: 30px;
+    max-width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(212,170,58,0.4), rgba(212,170,58,0.1));
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+  .timeline-connector::after {
+    content: '▶';
+    position: absolute;
+    right: -4px;
+    top: -7px;
+    font-size: 0.6rem;
+    color: rgba(212,170,58,0.5);
+  }
+  .solution-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  .solution-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--white-10);
+    border-radius: 8px;
+    padding: 1.8rem;
+    transition: all 0.3s;
+  }
+  .solution-card:hover {
+    border-color: rgba(59,111,212,0.4);
+    box-shadow: 0 8px 32px rgba(30,58,122,0.2);
+    transform: translateY(-3px);
+  }
+  .solution-card h3 {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gold-light);
+    margin-bottom: 0.5rem;
+  }
+  .solution-card p {
+    font-size: 0.87rem;
+    color: var(--white-60);
+    line-height: 1.6;
+  }
+
+  /* PRICING */
+  .pricing-section { background: var(--navy-950); }
+  .pricing-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .tab-btn {
+    padding: 0.55rem 1.4rem;
+    border-radius: 100px;
+    border: 1px solid var(--white-20);
+    background: transparent;
+    color: var(--white-60);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy-950);
+  }
+  .pricing-group { display: none; }
+  .pricing-group.active { display: block; }
+  .pricing-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .price-card {
+    background: rgba(8,18,40,0.8);
+    border: 1px solid var(--white-10);
+    border-radius: 12px;
+    padding: 2.2rem;
+    position: relative;
+    transition: all 0.35s ease;
+    backdrop-filter: blur(12px);
+    overflow: hidden;
+  }
+  .price-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(135deg, transparent 40%, rgba(212,170,58,0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .price-card:hover {
+    border-color: rgba(212,170,58,0.3);
+    transform: translateY(-6px);
+    box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 48px rgba(30,58,122,0.2);
+  }
+  .price-card.featured {
+    border-color: rgba(212,170,58,0.5);
+    background: linear-gradient(160deg, rgba(13,28,58,0.95), rgba(8,18,40,0.95));
+    box-shadow: 0 0 64px rgba(212,170,58,0.1), 0 24px 64px rgba(0,0,0,0.4);
+  }
+  .price-card.featured:hover { transform: translateY(-8px); }
+  .featured-badge {
+    position: absolute;
+    top: 1.4rem;
+    right: 1.4rem;
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    color: var(--navy-950);
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border-radius: 100px;
+  }
+  .price-tier {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .price-amount {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .price-period {
+    font-size: 0.82rem;
+    color: var(--white-50);
+    margin-bottom: 1.2rem;
+  }
+  .price-desc {
+    font-size: 0.87rem;
+    color: var(--white-70);
+    margin-bottom: 1.8rem;
+    line-height: 1.6;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--white-10);
+  }
+  .price-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-bottom: 2rem;
+  }
+  .price-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--white-70);
+  }
+  .price-features li::before {
+    content: '✓';
+    color: var(--gold);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+  }
+  .price-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+  .price-divider::before, .price-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--white-10);
+  }
+  .price-divider span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* WHY HCISS */
+  .why-section { background: var(--navy-900); }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+  .why-item {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border: 1px solid var(--white-05);
+    border-radius: 8px;
+    background: var(--white-05);
+    transition: all 0.3s;
+  }
+  .why-item:hover {
+    border-color: rgba(212,170,58,0.2);
+    background: rgba(255,255,255,0.07);
+    transform: translateY(-4px);
+  }
+  .why-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .why-item h3 {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+  .why-item p {
+    font-size: 0.83rem;
+    color: var(--white-55);
+    line-height: 1.6;
+  }
+
+  /* BENEFITS */
+  .benefits-section { background: var(--navy-950); }
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    border: 1px solid var(--white-10);
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  @media (max-width: 600px) { .benefits-grid { grid-template-columns: 1fr; } }
+  .benefit-item {
+    background: rgba(8,18,40,0.6);
+    padding: 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: background 0.3s;
+  }
+  .benefit-item:hover { background: rgba(13,28,58,0.8); }
+  .benefit-num {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-shine));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    flex-shrink: 0;
+  }
+  .benefit-item h3 {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.4rem;
+  }
+  .benefit-item p {
+    font-size: 0.83rem;
+    color: var(--white-55);
+    line-height: 1.6;
+  }
+
+  /* FINAL CTA */
+  .cta-section {
+    background: linear-gradient(160deg, var(--navy-800) 0%, var(--navy-900) 100%);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-glow {
+    position: absolute;
+    width: 700px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(30,58,122,0.4) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .cta-section h2 {
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .cta-section p {
+    font-size: 1.05rem;
+    color: var(--white-60);
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+  .cta-trust {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+  .cta-trust span {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--white-50);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy-950);
+    border-top: 1px solid var(--white-10);
+    padding: 2.5rem 5%;
+  }
+  .footer-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .footer-logo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--white-70);
+    letter-spacing: 0.05em;
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    flex-wrap: wrap;
+  }
+  .footer-links a {
+    color: var(--white-50);
+    text-decoration: none;
+    font-size: 0.82rem;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-copy {
+    font-size: 0.78rem;
+    color: var(--white-35);
+    width: 100%;
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--white-05);
+    margin-top: 1rem;
+  }
+
+  /* STICKY MOBILE CTA */
+  .sticky-mobile-cta {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+    padding: 1rem 1.5rem;
+    background: rgba(2,5,15,0.95);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(212,170,58,0.3);
+    text-align: center;
+  }
+  .sticky-mobile-cta a { width: 100%; justify-content: center; }
+  @media (max-width: 768px) {
+    .sticky-mobile-cta { display: block; }
+    footer { padding-bottom: 6rem; }
+  }
+
+  /* DIVIDER LINE */
+  .gold-line {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold-mid), var(--gold-shine));
+    border-radius: 2px;
+    margin: 1.2rem auto 0;
+  }
+
+  /* SCROLL ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-5 { transition-delay: 0.5s; }
+
+  /* GLASSMORPHISM CARD BASE */
+  .glass {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+</style>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar" role="banner">
+  <span class="bar-icon">⚠</span>
+  <p><strong>Limited Availability:</strong> Q3 AI Security Assessment slots are filling fast — secure your organization's spot now.</p>
+  <a href="#contact" class="btn-outline-gold" style="white-space:nowrap; font-size:0.78rem;">Book Strategy Call</a>
+</div>
+
+<!-- NAV -->
+<nav aria-label="Main navigation">
+  <a href="#" class="nav-logo" aria-label="HCISS Home">
+    <div class="nav-logo-icon">🛡️</div>
+    <span class="nav-logo-text">HC<span>ISS</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#pain">The Problem</a></li>
+    <li><a href="#solution">Our Framework</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#why">Why HCISS</a></li>
+  </ul>
+  <a href="#contact" class="btn-primary nav-cta" aria-label="Book a strategy call">Book Strategy Call →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="grid-bg"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-glow-gold" aria-hidden="true"></div>
+  <div class="hero-content">
+    <div class="hero-badge" role="status">AI Security & Governance Platform</div>
+    <h1 id="hero-heading">
+      Your AI Adoption Could Be Creating<br/>
+      <em>Security Risks You Can't See.</em>
+    </h1>
+    <p class="hero-sub">
+      The HCISS AI Security Readiness Kit™ helps organizations identify AI governance gaps, reduce data exposure risks, and establish stronger cybersecurity controls — before problems become costly.
+    </p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-primary">🔒 Book Free Strategy Call</a>
+      <a href="#solution" class="btn-secondary">View Assessment Framework →</a>
+    </div>
+    <div class="trust-indicators" role="list">
+      <div class="trust-item" role="listitem"><span class="trust-dot" aria-hidden="true"></span> AI Governance</div>
+      <div class="trust-item" role="listitem"><span class="trust-dot" aria-hidden="true"></span> Cybersecurity Oversight</div>
+      <div class="trust-item" role="listitem"><span class="trust-dot" aria-hidden="true"></span> Risk Assessment</div>
+      <div class="trust-item" role="listitem"><span class="trust-dot" aria-hidden="true"></span> Compliance Support</div>
+    </div>
+  </div>
+</section>
+
+<!-- PAIN POINTS -->
+<section class="pain-section" id="pain" aria-labelledby="pain-heading">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">The Risk Landscape</div>
+      <h2 id="pain-heading">Most Organizations Are Using AI<br/>Without Proper Oversight.</h2>
+      <div class="gold-line"></div>
+      <p style="margin-top:1.2rem;">Shadow AI adoption, ungoverned data flows, and missing control frameworks are exposing organizations to risks that leadership often doesn't know exist.</p>
+    </div>
+    <div class="pain-grid">
+      <div class="pain-card reveal reveal-delay-1">
+        <div class="pain-icon" aria-hidden="true">👁️</div>
+        <h3>Hidden AI Usage Across Teams</h3>
+        <p>Employees are adopting AI tools without visibility or control from IT or leadership. You likely don't know the full scope of what's in use.</p>
+      </div>
+      <div class="pain-card reveal reveal-delay-2">
+        <div class="pain-icon" aria-hidden="true">⚠️</div>
+        <h3>Uncontrolled Data Exposure</h3>
+        <p>Sensitive data is being fed into AI systems without proper classification, consent controls, or data governance policies in place.</p>
+      </div>
+      <div class="pain-card reveal reveal-delay-3">
+        <div class="pain-icon" aria-hidden="true">📋</div>
+        <h3>Missing Governance Policies</h3>
+        <p>Most organizations lack formal AI use policies, acceptable use frameworks, and accountability structures for AI-generated decisions.</p>
+      </div>
+      <div class="pain-card reveal reveal-delay-1">
+        <div class="pain-icon" aria-hidden="true">🔍</div>
+        <h3>Weak Audit Visibility</h3>
+        <p>Without audit trails for AI actions and outputs, organizations can't demonstrate control or respond confidently to regulatory inquiries.</p>
+      </div>
+      <div class="pain-card reveal reveal-delay-2">
+        <div class="pain-icon" aria-hidden="true">⚖️</div>
+        <h3>Growing Compliance Gaps</h3>
+        <p>Regulatory scrutiny of AI is accelerating. Organizations without documented governance are already falling behind compliance expectations.</p>
+      </div>
+      <div class="pain-card reveal reveal-delay-3">
+        <div class="pain-icon" aria-hidden="true">🌑</div>
+        <h3>Shadow AI Tool Proliferation</h3>
+        <p>Unapproved AI platforms accumulate rapidly. Each one represents a potential data breach, compliance violation, or liability exposure.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="solution-section" id="solution" aria-labelledby="solution-heading">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">The HCISS Framework</div>
+      <h2 id="solution-heading">A Structured AI Security<br/>&amp; Governance Framework</h2>
+      <div class="gold-line"></div>
+      <p style="margin-top:1.2rem;">HCISS provides a proven, agentic AI workflow with human cybersecurity oversight — moving your organization from assessment into continuous, auditable governance.</p>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="workflow-timeline reveal" aria-label="HCISS assessment workflow">
+      <div class="timeline-step">
+        <div class="timeline-node">01</div>
+        <div class="timeline-label">Assessment</div>
+      </div>
+      <div class="timeline-connector" aria-hidden="true"></div>
+      <div class="timeline-step">
+        <div class="timeline-node">02</div>
+        <div class="timeline-label">Audit</div>
+      </div>
+      <div class="timeline-connector" aria-hidden="true"></div>
+      <div class="timeline-step">
+        <div class="timeline-node">03</div>
+        <div class="timeline-label">Governance</div>
+      </div>
+      <div class="timeline-connector" aria-hidden="true"></div>
+      <div class="timeline-step">
+        <div class="timeline-node">04</div>
+        <div class="timeline-label">Monitoring</div>
+      </div>
+      <div class="timeline-connector" aria-hidden="true"></div>
+      <div class="timeline-step">
+        <div class="timeline-node">05</div>
+        <div class="timeline-label">Reporting</div>
+      </div>
+    </div>
+
+    <div class="solution-features">
+      <div class="solution-card reveal reveal-delay-1">
+        <h3>🎯 One-Time Assessment</h3>
+        <p>A comprehensive evaluation of your current AI usage, governance maturity, policy gaps, data exposure risk, and cybersecurity control readiness.</p>
+      </div>
+      <div class="solution-card reveal reveal-delay-2">
+        <h3>🔄 Ongoing Monthly Monitoring</h3>
+        <p>Recurring validation of controls, governance strengthening, auditing support, and continuous security oversight as your AI adoption evolves.</p>
+      </div>
+      <div class="solution-card reveal reveal-delay-3">
+        <h3>🧑‍💼 Human Cybersecurity Oversight</h3>
+        <p>AI-powered workflows backed by experienced cybersecurity professionals who validate findings, interpret risk, and guide remediation.</p>
+      </div>
+      <div class="solution-card reveal reveal-delay-1">
+        <h3>📊 Governance Validation</h3>
+        <p>Structured policy reviews, acceptable use framework development, and accountability documentation tailored to your organization's AI footprint.</p>
+      </div>
+      <div class="solution-card reveal reveal-delay-2">
+        <h3>🔐 Security Auditing</h3>
+        <p>Formal cybersecurity audit components aligned to your tier — providing documentation your leadership and auditors can trust.</p>
+      </div>
+      <div class="solution-card reveal reveal-delay-3">
+        <h3>📈 Risk Trend Monitoring</h3>
+        <p>Longitudinal tracking of AI risk exposure over time, with trend reports that demonstrate improving maturity to stakeholders and regulators.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing" aria-labelledby="pricing-heading">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Investment</div>
+      <h2 id="pricing-heading">Clear, Tier-Based Pricing</h2>
+      <div class="gold-line"></div>
+      <p style="margin-top:1.2rem;">Every engagement begins with a structured Assessment. Organizations ready for continuous oversight can move directly into monthly Monitoring.</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="pricing-tabs" role="tablist" aria-label="Pricing type selector">
+      <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="assessment-group" onclick="switchTab('assessment', this)">One-Time Assessment</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="monitoring-group" onclick="switchTab('monitoring', this)">Monthly Monitoring</button>
+    </div>
+
+    <!-- ASSESSMENT GROUP -->
+    <div class="pricing-group active" id="assessment-group" role="tabpanel">
+      <div class="pricing-cards">
+        <div class="price-card reveal reveal-delay-1">
+          <div class="price-tier">Core</div>
+          <div class="price-amount">$3,500</div>
+          <div class="price-period">One-time assessment</div>
+          <div class="price-desc">Baseline AI readiness evaluation with foundational cybersecurity audit. Ideal for organizations beginning their AI governance journey.</div>
+          <ul class="price-features">
+            <li>AI usage discovery & inventory</li>
+            <li>Governance maturity baseline</li>
+            <li>Policy gap identification</li>
+            <li>Data exposure risk review</li>
+            <li>Foundational cybersecurity audit</li>
+            <li>Assessment summary report</li>
+          </ul>
+          <a href="#contact" class="btn-secondary" style="width:100%; justify-content:center;">Get Started →</a>
+        </div>
+        <div class="price-card reveal reveal-delay-2">
+          <div class="price-tier">Regulated</div>
+          <div class="price-amount">$7,500</div>
+          <div class="price-period">One-time assessment</div>
+          <div class="price-desc">Deeper compliance-sensitive AI readiness evaluation with enhanced control review. Built for regulated industries and compliance-aware organizations.</div>
+          <ul class="price-features">
+            <li>Everything in Core, plus:</li>
+            <li>Compliance-sensitive control review</li>
+            <li>Regulatory alignment analysis</li>
+            <li>Enhanced audit documentation</li>
+            <li>Risk scoring by domain</li>
+            <li>Remediation roadmap</li>
+          </ul>
+          <a href="#contact" class="btn-secondary" style="width:100%; justify-content:center;">Get Started →</a>
+        </div>
+        <div class="price-card featured reveal reveal-delay-3">
+          <div class="featured-badge">Most Strategic</div>
+          <div class="price-tier">Enterprise</div>
+          <div class="price-amount">$15,000</div>
+          <div class="price-period">One-time assessment</div>
+          <div class="price-desc">Broader strategic AI readiness review covering governance architecture, security posture, and enterprise-wide risk. For organizations with complex AI footprints.</div>
+          <ul class="price-features">
+            <li>Everything in Regulated, plus:</li>
+            <li>Enterprise governance architecture</li>
+            <li>Strategic AI risk review</li>
+            <li>Executive briefing package</li>
+            <li>Cross-department coverage</li>
+            <li>Priority remediation support</li>
+          </ul>
+          <a href="#contact" class="btn-primary" style="width:100%; justify-content:center;">Book Strategy Call →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- MONITORING GROUP -->
+    <div class="pricing-group" id="monitoring-group" role="tabpanel">
+      <div class="pricing-cards">
+        <div class="price-card reveal reveal-delay-1">
+          <div class="price-tier">Core</div>
+          <div class="price-amount">$1,000</div>
+          <div class="price-period">per month</div>
+          <div class="price-desc">Monthly baseline AI governance and security validation. Keeps your controls current as AI adoption grows.</div>
+          <ul class="price-features">
+            <li>Monthly control validation</li>
+            <li>Governance status review</li>
+            <li>Basic security oversight</li>
+            <li>Monthly summary report</li>
+            <li>Policy update guidance</li>
+          </ul>
+          <a href="#contact" class="btn-secondary" style="width:100%; justify-content:center;">Get Started →</a>
+        </div>
+        <div class="price-card reveal reveal-delay-2">
+          <div class="price-tier">Regulated</div>
+          <div class="price-amount">$2,000</div>
+          <div class="price-period">per month</div>
+          <div class="price-desc">Monthly governance, auditing, and compliance-sensitive control review. Essential for regulated environments requiring ongoing oversight.</div>
+          <ul class="price-features">
+            <li>Everything in Core, plus:</li>
+            <li>Compliance-sensitive monitoring</li>
+            <li>Monthly audit documentation</li>
+            <li>Regulatory change tracking</li>
+            <li>Risk trend analysis</li>
+          </ul>
+          <a href="#contact" class="btn-secondary" style="width:100%; justify-content:center;">Get Started →</a>
+        </div>
+        <div class="price-card featured reveal reveal-delay-3">
+          <div class="featured-badge">Most Strategic</div>
+          <div class="price-tier">Enterprise</div>
+          <div class="price-amount">$4,000</div>
+          <div class="price-period">per month</div>
+          <div class="price-desc">Monthly broader assurance, strategic trend review, and executive-level oversight. For enterprises requiring continuous, comprehensive AI security assurance.</div>
+          <ul class="price-features">
+            <li>Everything in Regulated, plus:</li>
+            <li>Broader assurance coverage</li>
+            <li>Executive trend briefings</li>
+            <li>Strategic oversight sessions</li>
+            <li>Priority issue escalation</li>
+            <li>Dedicated oversight team</li>
+          </ul>
+          <a href="#contact" class="btn-primary" style="width:100%; justify-content:center;">Book Strategy Call →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY HCISS -->
+<section class="why-section" id="why" aria-labelledby="why-heading">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Our Approach</div>
+      <h2 id="why-heading">Built For Organizations Taking<br/>AI Security Seriously</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="why-grid">
+      <div class="why-item reveal reveal-delay-1">
+        <div class="why-icon" aria-hidden="true">🤝</div>
+        <h3>Human + AI Oversight</h3>
+        <p>Agentic AI workflows paired with senior cybersecurity professionals — ensuring accuracy, judgment, and accountability at every step.</p>
+      </div>
+      <div class="why-item reveal reveal-delay-2">
+        <div class="why-icon" aria-hidden="true">🏛️</div>
+        <h3>Governance-First Approach</h3>
+        <p>We build governance structures before rushing to controls — ensuring your organization has a durable, auditable foundation.</p>
+      </div>
+      <div class="why-item reveal reveal-delay-3">
+        <div class="why-icon" aria-hidden="true">📈</div>
+        <h3>Scalable Monitoring</h3>
+        <p>Our framework scales with your AI adoption — from initial assessment through enterprise-wide, ongoing oversight as complexity grows.</p>
+      </div>
+      <div class="why-item reveal reveal-delay-4">
+        <div class="why-icon" aria-hidden="true">📁</div>
+        <h3>Audit-Focused Workflows</h3>
+        <p>Every engagement produces documentation designed to withstand regulatory scrutiny, leadership review, and third-party audit.</p>
+      </div>
+      <div class="why-item reveal reveal-delay-5">
+        <div class="why-icon" aria-hidden="true">🏢</div>
+        <h3>Enterprise-Grade Methodology</h3>
+        <p>Structured, repeatable processes developed for complex organizational environments — not generic checklists.</p>
+      </div>
+      <div class="why-item reveal reveal-delay-1">
+        <div class="why-icon" aria-hidden="true">🔎</div>
+        <h3>Structured Governance Path</h3>
+        <p>Clear milestones from initial assessment through mature, validated AI governance — with measurable progress at every stage.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits-section" aria-labelledby="benefits-heading">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Outcomes</div>
+      <h2 id="benefits-heading">What Organizations Gain</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="benefits-grid reveal">
+      <div class="benefit-item">
+        <div class="benefit-num">01</div>
+        <div>
+          <h3>Stronger AI Visibility</h3>
+          <p>Full visibility into where AI is being used across your organization — including tools that weren't on your radar.</p>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-num">02</div>
+        <div>
+          <h3>Reduced Security Exposure</h3>
+          <p>Identified and addressed data exposure risks before they escalate into incidents, breaches, or liability events.</p>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-num">03</div>
+        <div>
+          <h3>Better Governance Maturity</h3>
+          <p>Documented AI governance policies, accountability structures, and control frameworks your organization can build on.</p>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-num">04</div>
+        <div>
+          <h3>Ongoing Oversight</h3>
+          <p>Continuous monitoring that validates your controls remain effective as AI adoption evolves across your organization.</p>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-num">05</div>
+        <div>
+          <h3>Improved Compliance Readiness</h3>
+          <p>Audit-ready documentation and governance evidence that positions your organization confidently for regulatory review.</p>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-num">06</div>
+        <div>
+          <h3>Executive Confidence</h3>
+          <p>Leadership, boards, and compliance officers gain the visibility and reporting they need to manage AI risk with confidence.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-section" id="contact" aria-labelledby="cta-heading">
+  <div class="cta-glow" aria-hidden="true"></div>
+  <div class="container" style="position:relative; z-index:2; text-align:center;">
+    <div class="section-label reveal">Start Your Assessment</div>
+    <h2 class="reveal" id="cta-heading">
+      Secure Your AI Adoption<br/>
+      <em class="gold-text">Before Risks Become Expensive.</em>
+    </h2>
+    <p class="reveal">Book a confidential AI security strategy session with the HCISS team. No commitment required — just clarity on where your organization stands.</p>
+    <div class="reveal" style="position:relative; display:inline-block; margin-top:0.5rem;">
+      <a href="mailto:contact@hciss.com?subject=AI Security Strategy Call Request" class="btn-primary" style="font-size:1rem; padding:1rem 2.2rem;">
+        🔒 Book Free Strategy Call
+      </a>
+    </div>
+    <div class="cta-trust reveal">
+      <span>✓ Confidential</span>
+      <span>✓ No commitment required</span>
+      <span>✓ Enterprise-focused</span>
+      <span>✓ Human-led oversight</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">HC<span>ISS</span> — AI Security Readiness Kit™</div>
+    <ul class="footer-links">
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#" aria-label="LinkedIn">LinkedIn</a></li>
+    </ul>
+  </div>
+  <p class="footer-copy">© 2025 HCISS. All rights reserved. AI Security Readiness Kit™ is a trademark of HCISS.</p>
+</footer>
+
+<!-- STICKY MOBILE CTA -->
+<div class="sticky-mobile-cta" aria-label="Mobile call to action">
+  <a href="#contact" class="btn-primary">🔒 Book Free Strategy Call</a>
+</div>
+
+<script>
+  // TAB SWITCHING
+  function switchTab(type, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll('.pricing-group').forEach(g => g.classList.remove('active'));
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+    document.getElementById(type + '-group').classList.add('active');
+  }
+
+  // SCROLL REVEAL
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach(el => observer.observe(el));
+
+  // STAGGER CHILDREN
+  document.querySelectorAll('.pain-grid, .solution-features, .why-grid, .pricing-cards').forEach(grid => {
+    Array.from(grid.children).forEach((child, i) => {
+      child.style.transitionDelay = `${i * 0.08}s`;
+    });
+  });
+</script>
+</body>
+</html>
